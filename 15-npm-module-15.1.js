@@ -30,31 +30,43 @@ function findDataContact() {
         console.log('Emty list number!')
     } else {
         var foundValue = readlineSync.question('What name or number you need find? : ');
-        console.log(typeof foundValueByNumber);
         
         var foundValueByNumber = parseFloat(foundValue);
-        if (typeof foundValueByNumber !== 'number') {
+        console.log(foundValueByNumber);
+        
+        if (!foundValueByNumber) {
             var foundPersonByName = DataContact.filter(function(element) {
                 console.log(element.name);
                 return element.name === foundValue;
             })
-            console.log(foundPersonByName);
-        } else {
+            return foundPersonByName;
+        } 
+        
+        if (foundValueByNumber) {
              var foundPersonByNumber =
                DataContact.filter(function(element) {
                return element.phoneNumber === 
                   foundValueByNumber;
                });
-           console.log(foundPersonByNumber);
+            return foundPersonByNumber;
         }
     }
 }
 
+function fixDataContact() {
+   var numberFixing = findDataContact(); 
+    var newPhoneName = readlineSync.question('What is new phone name? : ');
+    var newPhoneNumber = readlineSync.question('What is new phone number? : ');
+    numberFixing[0].name = newPhoneName;
+    numberFixing[0].phoneNumber = newPhoneNumber;
+    DataContact.concat(numberFixing);
+
+}
 
 
 function main() {
     getDataContact();
-//    fixDataContact();
+    fixDataContact();
 //    deleteDataContact();
     findDataContact();
 }
