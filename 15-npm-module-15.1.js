@@ -10,6 +10,44 @@ var fs = require('fs');
 
 var DataContact = [];
 
+function readJSON() {
+    var content = fs.readFileSync('./15-npm-module-15.1.data.json', {
+        encoding: 'utf8'
+    });
+    if (content) {
+        DataContact = JSON.parse(content);
+    }
+}
+
+function getOptions() {
+    console.log('1. Creat new contact');
+    console.log('2. Fix contact');
+    console.log('3. Delete contact');
+    console.log('4. Find contact');
+    option = readlineSync.question('Chose 1 of this: ');
+    
+    switch(option) {
+        case '1': 
+            getDataContact();
+            getOptions();
+            break;
+        case '2':
+            fixDataContact();
+            getOptions();
+            break;
+        case '3':
+            deleteDataContact();
+            getOptions();
+            break;
+        case '4':
+            findDataContact();
+            getOptions();
+            break;
+        default:
+            console.log('Wrong option');
+            break;
+    };
+}
 
 function getDataContact() {
     var persons = {};
@@ -19,10 +57,13 @@ function getDataContact() {
     var phoneNumberData = readlineSync.question('What phone number? :');
     
     persons.name = nameData;
-    persons.phoneNumber =
-        parseFloat(phoneNumberData);
+    persons.phoneNumber = parseFloat(phoneNumberData);
     DataContact.push(persons);
-    console.log(DataContact);
+    
+    DataContactJSON = JSON.stringify(DataContact);
+    fs.writeFileSync('./15-npm-module-15.1.data.json', DataContactJSON, {
+        encoding: 'utf8'
+    })
 };
 
 function findDataContact() {
@@ -30,13 +71,10 @@ function findDataContact() {
         console.log('Emty list number!')
     } else {
         var foundValue = readlineSync.question('What name or number you need find? : ');
-        
-        var foundValueByNumber = parseFloat(foundValue);
-        console.log(foundValueByNumber);
+        var foundValueByNumber = parseFloat(foundValue);        
         
         if (!foundValueByNumber) {
             var foundPersonByName = DataContact.filter(function(element) {
-                console.log(element.name);
                 return element.name === foundValue;
             })
             return foundPersonByName;
@@ -58,17 +96,18 @@ function fixDataContact() {
     var newPhoneName = readlineSync.question('What is new phone name? : ');
     var newPhoneNumber = readlineSync.question('What is new phone number? : ');
     numberFixing[0].name = newPhoneName;
-    numberFixing[0].phoneNumber = newPhoneNumber;
+    numberFixing[0].phoneNumber = parseFloat(newPhoneNumber);
     DataContact.concat(numberFixing);
-
+    console.log(DataContact);
 }
 
+function deleteDataContact() {
+    
+}
 
 function main() {
-    getDataContact();
-    fixDataContact();
-//    deleteDataContact();
-    findDataContact();
+    readJSON();
+    getOptions();
 }
 
 main();
