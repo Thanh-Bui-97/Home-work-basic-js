@@ -40,7 +40,8 @@ function getOptions() {
             getOptions();
             break;
         case '4':
-            findDataContact();
+            var foundResult = findDataContact();
+            console.log(foundResult);
             getOptions();
             break;
         default:
@@ -70,29 +71,36 @@ function findDataContact() {
     if (!DataContact) {
         console.log('Emty list number!')
     } else {
-        var foundValue = readlineSync.question('What name or number you need find? : ');
+        var foundValue = readlineSync.question('fill name or number? : ');
         var foundValueByNumber = parseFloat(foundValue);        
         
         if (!foundValueByNumber) {
-            var foundPersonByName = DataContact.filter(function(element) {
-                return element.name === foundValue;
-            })
-            return foundPersonByName;
-        } 
+            for (i = 0; i <= DataContact.length; i++) {
+                if (foundValue === DataContact[i].name) {
+                    return DataContact[i];
+                    break;
+                } else {
+                    continue;
+                    console.log('Can not find the phone number you need!!')
+                }  
+            }
+        };
         
         if (foundValueByNumber) {
-             var foundPersonByNumber =
-               DataContact.filter(function(element) {
-               return element.phoneNumber === 
-                  foundValueByNumber;
-               });
-            return foundPersonByNumber;
-        }
+            for (e = 0; e <= DataContact.length; e++) {
+                if (foundValueByNumber === DataContact[e].phoneNumber) {
+                    return DataContact[e]
+                    break;
+                }
+            }
+            return 'Can not find the phone number you need!!';
+        };
     }
 }
 
 function fixDataContact() {
-   var numberFixing = findDataContact(); 
+    var numberFixing = findDataContact(); 
+    console.log(numberFixing);
     var newPhoneName = readlineSync.question('What is new phone name? : ');
     var newPhoneNumber = readlineSync.question('What is new phone number? : ');
     numberFixing[0].name = newPhoneName;
