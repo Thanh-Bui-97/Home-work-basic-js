@@ -75,25 +75,31 @@ function findDataContact() {
         var foundValueByNumber = parseFloat(foundValue);        
         
         if (!foundValueByNumber) {
-            for (i = 0; i <= DataContact.length; i++) {
+            var resultOfContactByName;
+            for (i = 0; i < DataContact.length; i++) {
                 if (foundValue === DataContact[i].name) {
-                    return DataContact[i];
-                    break;
-                } else {
-                    continue;
-                    console.log('Can not find the phone number you need!!')
-                }  
+                    resultOfContactByName = DataContact[i];
+                }   
+            };
+            if (resultOfContactByName) {
+                return resultOfContactByName;
+            } else {
+                return 'Can not find the phone number you need!!';
             }
         };
         
         if (foundValueByNumber) {
-            for (e = 0; e <= DataContact.length; e++) {
+            var resultOfContactByNumber;
+            for (e = 0; e < DataContact.length; e++) {
                 if (foundValueByNumber === DataContact[e].phoneNumber) {
-                    return DataContact[e]
-                    break;
+                    resultOfContactByNumber = DataContact[e];
                 }
             }
-            return 'Can not find the phone number you need!!';
+            if (resultOfContactByNumber) {
+                return resultOfContactByNumber;
+            } else {
+                return 'Can not find the phone number you need!!';
+            }
         };
     }
 }
@@ -103,14 +109,27 @@ function fixDataContact() {
     console.log(numberFixing);
     var newPhoneName = readlineSync.question('What is new phone name? : ');
     var newPhoneNumber = readlineSync.question('What is new phone number? : ');
-    numberFixing[0].name = newPhoneName;
-    numberFixing[0].phoneNumber = parseFloat(newPhoneNumber);
+    numberFixing.name = newPhoneName;
+    numberFixing.phoneNumber = parseFloat(newPhoneNumber);
     DataContact.concat(numberFixing);
-    console.log(DataContact);
+    console.log('Contacts List NOW: ', DataContact);
+    fs.writeFileSync('./15-npm-module-15.1.data.json', JSON.stringify(DataContact), {
+        encoding: 'utf8'
+    });
 }
 
 function deleteDataContact() {
-    
+    var contactDeleted = findDataContact();
+    console.log(contactDeleted);
+    for (dataDel = 0; dataDel < DataContact.length; dataDel++) {
+        if (DataContact[dataDel].name === contactDeleted.name) {
+            DataContact.splice(dataDel, 1);
+        }
+    }
+    console.log('Contacts List NOW: ', DataContact);
+    fs.writeFileSync('./15-npm-module-15.1.data.json', JSON.stringify(DataContact), {
+        encoding: 'utf8'
+    });
 }
 
 function main() {
